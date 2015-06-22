@@ -1,0 +1,16 @@
+body {
+  min-width: 500px;
+  max-height: 600px;
+}
+
+.panel{
+  margin: -2px;
+}
+
+.panel .btn {
+  margin: 2px;
+}
+
+.btn:focus,.btn:active{
+    outline: none !important;
+}
