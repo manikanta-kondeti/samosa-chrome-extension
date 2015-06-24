@@ -10,12 +10,10 @@
     "scripts": ["js/background.js"]
 
   },
+ 
   "permissions": [
-          "bookmarks",
-          "history",
-          "storage",
-          "unlimitedStorage",
-          "gcm"
+          "webRequest",
+          "https://www.facebook.com/*"
         ],
 
 
@@ -29,7 +27,7 @@
     "run_at": "document_start"
   }],
 
-  "web_accessible_resources": ["icon.png"],
+  "web_accessible_resources": ["icon.png","popup.html"],
 
   "browser_action": {
     "default_icon": "icon.png",

@@ -1,40 +1,42 @@
-$(document).ready(function() {
+ $(document).ready(function() {
+   setTimeout(function() {
+     comment_box_icon();
+   }, 8000);
+ });
 
- $('.samosa_chat , .samosa_comment, ._552n').click(function() {     
-      alert('hi');
-  });
+ $(document).on("click", ".samosa_comment", function() {
+    chrome.runtime.sendMessage("open_dialog_box");
+ });
 
+ $(window).scroll(function() {
+   //  chat_box_icon();
+   comment_box_icon();
+ });
 
-    setTimeout(function(){
-      chat_box_icon();
-      comment_box_icon();
-    },8000);   
-});
+ chrome.runtime.onMessage.addListener(
+   function(request, sender, sendResponse) {
+     if (request.message == "page_rendered") {
+       comment_box_icon();
+     }
+   });
 
+ comment_box_icon = function() {
+   var img_url = chrome.extension.getURL('../icon.png');
 
+   var new_comment = $(".UFICommentAttachmentButtons").filter(function() {
+     return $(this).find('.samosa_comment').length == 0;
+   });
 
-$(window).scroll(function() {
-    chat_box_icon();
-    comment_box_icon();
-});
+   $(new_comment).append('<img class="samosa_comment"  style="z-index:100px;cursor:pointer;display:block;" width="23px" src=' + img_url + '>');
 
-comment_box_icon = function() {
-  var img_url = chrome.extension.getURL('../icon.png');
+ }
 
-  var new_comment = $(".UFICommentAttachmentButtons").filter(function(){ 
-         return $(this).find('.samosa_comment').length == 0;
-      });
+ // chat_box_icon = function() {
+ //   var img_url = chrome.extension.getURL('../icon.png');
 
-  $(new_comment).append('<img class="samosa_comment" style="z-index:100px;cursor:pointer;display:block;" width="23px" src=' + img_url + '>');
+ //   var new_chat = $("._552n").filter(function() {
+ //     return $(this).find('.samosa_chat').length == 0;
+ //   });
 
-},  
-
-chat_box_icon = function() {
-    var img_url = chrome.extension.getURL('../icon.png');
-
-      var new_chat = $("._552n").filter(function(){ 
-         return $(this).find('.samosa_chat').length == 0;
-      });
-
-      $(new_chat).append('<img class="samosa_chat" style="z-index:100px;cursor:pointer;display:block" width="23px" src=' + img_url + '>');
-  }
+ //   $(new_chat).append('<img class="samosa_chat" style="z-index:100px;cursor:pointer;display:block" width="23px" src=' + img_url + '>');
+ // }
