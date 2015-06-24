@@ -9,8 +9,12 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
 
     chrome.windows.create({'url': '../popup.html', 'type': 'popup', 'width': w, 'height': h, 'left': left, 'top': top}, 
       function(window) {
-        console.log(window);
+          $('.panel-heading').click(function(){
+            console.log('hi');
+          })
       });
   
   }
+
+
 });

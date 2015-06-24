@@ -8,10 +8,13 @@
     chrome.runtime.sendMessage("open_dialog_box");
  });
 
+
  $(window).scroll(function() {
    //  chat_box_icon();
    comment_box_icon();
  });
+
+
 
  chrome.runtime.onMessage.addListener(
    function(request, sender, sendResponse) {
