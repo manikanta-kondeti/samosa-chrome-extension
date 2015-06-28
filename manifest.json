@@ -7,13 +7,17 @@
 
   "background": {
 
-    "scripts": ["js/background.js"]
+    "scripts": ["js/jquery-2.1.4.min.js","js/background.js","js/client.js"]
 
   },
  
+ "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
+
+
   "permissions": [
           "webRequest",
-          "https://www.facebook.com/*"
+          "https://www.facebook.com/*",
+          "https://apis.google.com/*"
         ],
 
 
@@ -23,11 +27,14 @@
       "js/jquery-2.1.4.min.js",
       "js/main.js"
     ],
+    "css":[
+      "css/iframe.css"
+    ],
 
     "run_at": "document_start"
   }],
 
-  "web_accessible_resources": ["icon.png","popup.html"],
+  "web_accessible_resources": ["icon.png","modal.html"],
 
   "browser_action": {
     "default_icon": "icon.png",

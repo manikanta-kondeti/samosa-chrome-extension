@@ -1,20 +1,19 @@
-chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(message, sender) {
 
-  if (msg == 'open_dialog_box') {
-
-    var w = 800;
-    var h = 400;
-    var left = (screen.width/2)-(w/2);
-    var top = (screen.height/2)-(h/2); 
-
-    chrome.windows.create({'url': '../popup.html', 'type': 'popup', 'width': w, 'height': h, 'left': left, 'top': top}, 
-      function(window) {
-          $('.panel-heading').click(function(){
-            console.log('hi');
-          })
-      });
-  
-  }
-
-
+	 if(message == "show_popup"){
+	 		
+	 		console.log("Init Called");
+            var ROOT = 'https://the-tasty-samosa.appspot.com/_ah/api';
+            gapi.client.load('samosa', 'v1', function() {
+                console.log("Api loaded");
+            }, ROOT);
+        
+        var popular_now = gapi.client.samosa.api.expressions.popular().execute(
+            function(resp) {
+                console.log(resp);
+        });
+	 }
+	 else{
+   	 	chrome.tabs.sendMessage(sender.tab.id, message);
+   	}
 });
