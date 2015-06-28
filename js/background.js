@@ -8,7 +8,7 @@ chrome.runtime.onMessage.addListener(function(message, sender) {
                 console.log("Api loaded");
             }, ROOT);
         
-        var popular_now = gapi.client.samosa.api.expressions.popular().execute(
+        gapi.client.samosa.api.expressions.popular().execute(
             function(resp) {
                 console.log(resp);
         });
