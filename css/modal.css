@@ -1,4 +1,4 @@
-.overlay {
+.samosa-overlay {
   position: fixed;
   top: 0%;
   left: 0%;
@@ -8,15 +8,36 @@
   z-index: 1000;
   opacity: .80;
 }
-.wrapper {
+
+.samosa-wrapper {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 400px;
-  height: 200px;
-  margin-left: -200px;
-  margin-top: -100px;
+  border-radius: 7px;
+  top: 45px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 900px;
+  height: 600px;
+  margin: 0 auto;
   text-align: center;
   background-color:#FFFFFF;
   z-index: 1100;
+}
+
+
+.samosa-audioclip{
+position:relative;
+width:120px;
+float:left;
+padding-right:10px;
+padding-bottom: 10px;
+}
+
+ 
+.samosa-heading {
+    color: #ECECF6;
+    text-shadow: -1px -1px 1px #FFFFFF, 1px 1px 1px #000000;
+}
+.samosa-heading h2 {
+    opacity: 0.5;
 }

@@ -16,9 +16,11 @@
 
   "permissions": [
           "webRequest",
+          "clipboardWrite",
           "https://www.facebook.com/*",
           "https://apis.google.com/*"
         ],
+
 
 
   "content_scripts": [{ // Scripts to run on page
@@ -28,13 +30,13 @@
       "js/main.js"
     ],
     "css":[
-      "css/iframe.css"
+      "css/main.css"
     ],
 
     "run_at": "document_start"
   }],
 
-  "web_accessible_resources": ["icon.png","modal.html"],
+  "web_accessible_resources": ["icon.png","modal.html","css/modal.css","js/jquery-2.1.4.min.js","js/modal.js","play.png","pause.png"],
 
   "browser_action": {
     "default_icon": "icon.png",
