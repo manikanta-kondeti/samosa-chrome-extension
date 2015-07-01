@@ -29,6 +29,7 @@
      chrome.extension.sendRequest({
        msg: "load_popup"
      }, function(response) {
+        response.html += '<link rel="stylesheet" type="text/css" href="'+chrome.extension.getURL('../css/modal.css')+'">'
        $("body").append(response.html);
      });
    }
