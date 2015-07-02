@@ -27,3 +27,15 @@ Top bar which contains update status,add photos etc.
   margin-right: 5px;
   cursor: pointer;
 }
+
+.samosa_comment{
+  opacity: 0.6;
+}
+
+.samosa_comment:hover{
+  opacity: 1;
+}
+
+.UFICommentAttachmentButtons{
+  z-index:100 !important;
+}
