@@ -13,6 +13,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     }
 
 
+
 });
 
 /*
@@ -28,6 +29,11 @@ chrome.runtime.onMessage.addListener(function(message) {
         document.execCommand('Copy');
         input.remove();
     }
+
+    if(message && message.type === 'search_query'){
+        search_by_tags([message.text]);
+    }
+
 });
 
 
@@ -44,15 +50,17 @@ get_voices = function() {
 }
 
 /**
- *  search_by_tags takes an argument tagsArray (array of desired tags for eg: ['svsc','mahesh']) and sends a list of voices. We can access it from obj.voices
- * 
+ *  search_by_tags takes an argument tagsArray (array of desired tags for eg: ['svsc','mahesh']) and sends a list of voices. 
+ *  We can access it from obj.voices
  */
 search_by_tags = function(tagsArray) {
     gapi.client.samosa.api.get_search_results({'tags': tagsArray}).execute(
             function(resp){
                 obj = resp;
                 console.log('Search Successful');
-                console.log(resp);
+                chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                     chrome.tabs.sendMessage(tabs[0].id, {voices: resp.voices});
+                 });
             });     
 }
 
@@ -65,7 +73,6 @@ popular_now = function() {
 
     var popular_voices = gapi.client.samosa.api.expressions.popular().execute(
       function(resp) {
-
 
              chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                  chrome.tabs.sendMessage(tabs[0].id, {voices: resp.voices});

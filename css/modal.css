@@ -11,6 +11,7 @@
 
 .samosa-wrapper {
   position: fixed;
+  overflow: scroll;
   border-radius: 7px;
   top: 45px;
   left: 0;

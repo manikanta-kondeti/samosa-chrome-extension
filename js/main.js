@@ -11,6 +11,7 @@ $(document).ready(function() {
 
 /**
  * copy url of the audio clip to the facebook comment box
+ * load html page to the modal and show it 
  */
 
 $(document).on("click", ".samosa_comment", function(e) {
@@ -18,11 +19,11 @@ $(document).on("click", ".samosa_comment", function(e) {
   var parent_span = $(this).parent().parent().siblings().find('span');
   var data_reactid = parent_span.children().attr('data-reactid');
 
+  $(this).parent().parent().siblings().find('._5ywb').remove();
+
   parent_span.children().remove();
 
-  parent_span.append('<span data-reactid="' + data_reactid + '">asdasdasd</span>');
-
-  $(this).parent().parent().siblings().find('._5ywb').remove();
+  parent_span.html('<span data-reactid="' + data_reactid + '">asdasdasd</span>');
 
   if ($('.samosa-modal').length === 0) {
 
@@ -54,7 +55,7 @@ $(document).on('click', '.samosa-copybtn', function(e) {
 });
 
 /*
-  Close the modal 
+  Close the modal and stop all playing audio clips on modal
  */
 $(document).on('click', '.samosa-overlay', function(e) {
 
@@ -68,34 +69,36 @@ $(document).on('click', '.player', function(e) {
   var id = $(this).attr('id');
   if (id === "play") {
 
-    var audioclip_path = $(this).parent().find('span').text();
-    var myaudio = new Audio(audioclip_path);
-
     /*
      * Attaching audio end event to the clip. 
      */
-    myaudio.addEventListener("ended", function() {
-      $(this).parent().find('#pause').attr('id', 'play');
-      $(this).parent().find('#play').attr('src', chrome.extension.getURL("../images/play.png"));
-    });
 
-    if (typeof $(this).siblings()[3] == "undefined") {
+    if ($(this).parent().find('audio').length === 0) {
+
+      var myaudio = create_audio(this);
       $(this).parent().append(myaudio);
-      $(this).siblings()[3].play();
-      $(this).attr('id', 'pause');
-      $(this).attr('src', chrome.extension.getURL("../images/pause.png"))
+      audio_action(this, 'pause');
+
     }
     else {
-      $(this).siblings()[3].play();
-      $(this).attr('id', 'pause');
-      $(this).attr('src', chrome.extension.getURL("../images/pause.png"))
+      audio_action(this, 'pause');
     }
   }
   else {
-    $(this).siblings()[3].pause();
-    $(this).attr('id', 'play');
-    $(this).attr('src', chrome.extension.getURL("../images/play.png"))
+
+    audio_action(this, 'play');
   }
+});
+
+$(document).on('click', '.samosa-search-btn', function() {
+
+  console.log('hi');
+
+  chrome.runtime.sendMessage({
+    type: 'search_query',
+    text: $('.samosa-search-field').val()
+  });
+
 });
 
 /*
@@ -106,31 +109,78 @@ chrome.runtime.onMessage.addListener(
     add_voices(request.voices);
   });
 
+create_audio = function(player_object) {
+
+  var _this = player_object;
+
+  var audioclip_path = $(_this).parent().find('span').text();
+  var myaudio = new Audio(audioclip_path);
+
+  myaudio.addEventListener("ended", function() {
+    $(_this).parent().find('#pause').attr('id', 'play');
+    $(_this).parent().find('#play').attr('src', chrome.extension.getURL("../images/play.png"));
+  });
+
+  return myaudio;
+}
+
+audio_action = function(player_object, id) {
+
+  console.log(player_object);
+  var _this = player_object;
+  console.log($(_this).parent().find('audio'));
+  if (id == "pause") {
+    $(_this).parent().find('audio')[0].play();
+  }
+  else {
+    $(_this).parent().find('audio')[0].pause();
+  }
+  //$(this).siblings()[3].pause();
+  $(_this).attr('id', id);
+  $(_this).attr('src', chrome.extension.getURL('../images/' + id + '.png'));
+
+}
 
 /**
- * pause_allaudio stops all audio files playing in modal
+ * pause_allaudio stops all audio files playing in modal and resets music audio clips
  */
 pause_allaudio = function() {
-  var audio = $('audio');
 
-  for (i = 0; i < audio.length; i++) {
-    audio[i].pause();
-  }
-}
-/**
- * add_voices adds voice clips to the modal of the chrome extension
- * @param {[object]} voices [popular voices object]
- */
-add_voices = function(voices) {
+    var audio = $('audio');
 
-    for (i = 0; i < voices.length; i++) {
-      $('.samosa-clips').append('<div class="samosa-audioclip"> \
+    for (i = 0; i < audio.length; i++) {
+      audio[i].pause();
+    }
+
+    $('.player').filter(function() {
+      $(this).attr('id', 'play');
+      $(this).attr('src', chrome.extension.getURL("../images/play.png"))
+    });
+
+  },
+
+  /**
+   * add_voices adds voice clips to the modal of the chrome extension
+   * @param {[object]} voices [popular voices object]
+   */
+  add_voices = function(voices) {
+
+    $('.samosa-clips').empty();
+
+    if (voices.length != 0) {
+
+      for (i = 0; i < voices.length; i++) {
+        $('.samosa-clips').append('<div class="samosa-audioclip"> \
         <img width="120" height="120" src="' + voices[i].poster_url + '" style="position: relative; top: 0; left: 0;"/> \
         <img class="player" id ="play" src="' + chrome.extension.getURL("../images/play.png") + '" style="width:30px;position: absolute; top: 43px; left: 45px; cursor:pointer;"/> \
         <span style="display:none;" class="audioclip-path">' + voices[i].mp3_url + '</span> \
         <button class="samosa-copybtn" style="height:25px;width:120px;cursor:pointer;font-size:8px;">CLICK TO COPY</button> \
       </div> \
       ');
+      }
+    }
+    else {
+      $('.samosa-clips').append('No voices found :( . Try again!!');
     }
   },
 
@@ -140,7 +190,7 @@ add_voices = function(voices) {
   comment_box_icon = function() {
     var img_url = chrome.extension.getURL('../images/icon.png');
 
-    var new_comment = $(".UFICommentAttachmentButtons").filter(function() {
+    var new_comment = $('.UFICommentAttachmentButtons').filter(function() {
       return $(this).find('.samosa_comment').length == 0;
     });
 
