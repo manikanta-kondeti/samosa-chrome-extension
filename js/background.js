@@ -1,9 +1,9 @@
 
 /*
-  Checks for load_up. If so sends the html page of the modal to the main function and also fetches popular voices  
- */
+   Checks for load_up. If so sends the html page of the modal to the main function and also fetches popular voices  
+   */
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-    
+
     if(request.msg === 'load_popup') {
         get_voices();
 
@@ -16,8 +16,8 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 });
 
 /*
- Copy to clipboard. Listens for message from main and executes copy
- */
+   Copy to clipboard. Listens for message from main and executes copy
+   */
 chrome.runtime.onMessage.addListener(function(message) {
     if (message && message.type === 'copy') {
         var input = document.createElement('textarea');
@@ -36,13 +36,26 @@ chrome.runtime.onMessage.addListener(function(message) {
  * @return {[null]} 
  */
 get_voices = function() {
-        var ROOT = 'https://the-tasty-samosa.appspot.com/_ah/api';
-        gapi.client.load('samosa', 'v1', function() {
-          popular_now();
-        }, ROOT);
-
+    var ROOT = 'https://the-tasty-samosa.appspot.com/_ah/api';
+    gapi.client.load('samosa', 'v1', function() {
+        popular_now();
+    }, ROOT);
 
 }
+
+/**
+ *  search_by_tags takes an argument tagsArray (array of desired tags for eg: ['svsc','mahesh']) and sends a list of voices. We can access it from obj.voices
+ * 
+ */
+search_by_tags = function(tagsArray) {
+    gapi.client.samosa.api.get_search_results({'tags': tagsArray}).execute(
+            function(resp){
+                obj = resp;
+                console.log('Search Successful');
+                console.log(resp);
+            });     
+}
+
 
 /**
  * popular_now sends message of voices from background to main to write it on the modal
