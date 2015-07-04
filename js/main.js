@@ -103,6 +103,10 @@ $(document).on('click', '.player', function(e) {
   }
 });
 
+/*
+  on keypress enter search for the results modal search box
+ */
+
 $(document).on('keypress', '.samosa-search-field', function(e) {
 
   if (e.which == 13) { // Checks for the enter key
