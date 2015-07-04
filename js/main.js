@@ -42,6 +42,16 @@ $(document).on("click", ".samosa_comment", function(e) {
   }
 });
 
+$(document).keyup(function(e) {
+  if (e.keyCode === 27) {
+ 
+    if($('.samosa-modal').css('display') == 'block'){
+        
+        $('.samosa-modal').hide();
+    }
+  }
+});
+
 /*
   click to copy the url of the audio clip.
   copy function is a background job
