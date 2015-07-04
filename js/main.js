@@ -32,9 +32,9 @@ $(document).on("click", ".samosa_comment", function(e) {
     }, function(response) {
       response.html += '<link rel="stylesheet" type="text/css" href="' + chrome.extension.getURL('../css/modal.css') + '">'
       $("body").append(response.html);
-      $('.samosa-icon').html('<img width = "42" src="'+chrome.extension.getURL('../images/icon.png')+'">');
-      $('.samosa-clips').html('<img width = "300" src="'+chrome.extension.getURL('../images/loading.gif')+'">');
-      
+      $('.samosa-icon').html('<img width = "42" src="' + chrome.extension.getURL('../images/icon.png') + '">');
+      $('.samosa-clips').html('<img width = "300" src="' + chrome.extension.getURL('../images/loading.gif') + '">');
+
     });
   }
   else {
@@ -93,10 +93,23 @@ $(document).on('click', '.player', function(e) {
   }
 });
 
+$(document).on('keypress', '.samosa-search-field', function(e) {
+
+  if (e.which == 13) { // Checks for the enter key
+
+    $('.samosa-clips').html('<img width = "300" src="' + chrome.extension.getURL('../images/loading.gif') + '">');
+    
+    chrome.runtime.sendMessage({
+      type: 'search_query',
+      text: $('.samosa-search-field').val()
+    });
+
+  }
+});
+
 $(document).on('click', '.samosa-search-btn', function() {
 
-  $('.samosa-clips').html('<img width = "300" src="'+chrome.extension.getURL('../images/loading.gif')+'">');
-
+  $('.samosa-clips').html('<img width = "300" src="' + chrome.extension.getURL('../images/loading.gif') + '">');
 
   chrome.runtime.sendMessage({
     type: 'search_query',
@@ -130,7 +143,6 @@ create_audio = function(player_object) {
 
 audio_action = function(player_object, id) {
 
- 
   var _this = player_object;
   if (id == "pause") {
     $(_this).parent().find('audio')[0].play();
