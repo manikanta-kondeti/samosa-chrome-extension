@@ -58,7 +58,7 @@ $(document).keyup(function(e) {
  */
 $(document).on('click', '.samosa-copybtn', function(e) {
 
-  var link = $(this).parent().find('span').text();
+  var link = $(this).parent().find('.audioclip-copypath').text();
 
   chrome.runtime.sendMessage({
     type: 'copy',
@@ -203,6 +203,7 @@ pause_allaudio = function() {
         <img width="120" height="120" src="' + voices[i].poster_url + '" style="position: relative; top: 0; left: 0;"/> \
         <img class="player" id ="play" src="' + chrome.extension.getURL("../images/play.png") + '" style="width:30px;position: absolute; top: 43px; left: 45px; cursor:pointer;"/> \
         <span style="display:none;" class="audioclip-path">' + voices[i].mp3_url + '</span> \
+        <div style="display:none;" class="audioclip-copypath"> http://app.getsamosa.com/play/' + voices[i].key + '</div> \
         <button class="samosa-copybtn" style="height:25px;width:120px;cursor:pointer;font-size:8px;">CLICK TO COPY</button> \
       </div> \
       ');
