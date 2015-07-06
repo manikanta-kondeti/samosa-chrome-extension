@@ -16,14 +16,6 @@ $(document).ready(function() {
 
 $(document).on("click", ".samosa_comment", function(e) {
 
-  var parent_span = $(this).parent().parent().siblings().find('span');
-  var data_reactid = parent_span.children().attr('data-reactid');
-
-  $(this).parent().parent().siblings().find('._5ywb').remove();
-
-  parent_span.children().remove();
-
-  parent_span.html('<span data-reactid="' + data_reactid + '">asdasdasd</span>');
 
   if ($('.samosa-modal').length === 0) {
 
@@ -47,8 +39,10 @@ $(document).keyup(function(e) {
  
     if($('.samosa-modal').css('display') == 'block'){
         
+        pause_allaudio();
         $('.samosa-modal').hide();
     }
+
   }
 });
 
@@ -65,6 +59,10 @@ $(document).on('click', '.samosa-copybtn', function(e) {
     text: link
   });
 
+ $( '.samosa-modal' ).fadeOut( "slow", function() {
+    // Animation complete.
+  });
+
 });
 
 /*
@@ -77,30 +75,18 @@ $(document).on('click', '.samosa-overlay', function(e) {
   $('.samosa-modal').hide();
 });
 
-$(document).on('click', '.player', function(e) {
+$(document).on('click', '.samosa-player', function(e) {
 
   var id = $(this).attr('id');
   if (id === "play") {
 
-    /*
-     * Attaching audio end event to the clip. 
-     */
+    audio_action(this, 'pause');
 
-    if ($(this).parent().find('audio').length === 0) {
-
-      var myaudio = create_audio(this);
-      $(this).parent().append(myaudio);
-      audio_action(this, 'pause');
-
-    }
-    else {
-      audio_action(this, 'pause');
-    }
-  }
+  }  
   else {
-
     audio_action(this, 'play');
   }
+
 });
 
 /*
@@ -121,15 +107,10 @@ $(document).on('keypress', '.samosa-search-field', function(e) {
   }
 });
 
-$(document).on('click', '.samosa-search-btn', function() {
-
-  $('.samosa-clips').html('<img width = "300" src="' + chrome.extension.getURL('../images/loading.gif') + '">');
-
-  chrome.runtime.sendMessage({
-    type: 'search_query',
-    text: $('.samosa-search-field').val()
-  });
-
+$(document).on('mouseenter', '.samosa-audioclip',  function(){
+         $(this).find('.samosa-copybtn').css('visibility','visible');
+}).on('mouseleave', '.samosa-audioclip', function() {
+        $(this).find('.samosa-copybtn').css('visibility','hidden');
 });
 
 /*
@@ -140,20 +121,6 @@ chrome.runtime.onMessage.addListener(
     add_voices(request.voices);
   });
 
-create_audio = function(player_object) {
-
-  var _this = player_object;
-
-  var audioclip_path = $(_this).parent().find('span').text();
-  var myaudio = new Audio(audioclip_path);
-
-  myaudio.addEventListener("ended", function() {
-    $(_this).parent().find('#pause').attr('id', 'play');
-    $(_this).parent().find('#play').attr('src', chrome.extension.getURL("../images/play.png"));
-  });
-
-  return myaudio;
-}
 
 audio_action = function(player_object, id) {
 
@@ -181,7 +148,7 @@ pause_allaudio = function() {
       audio[i].pause();
     }
 
-    $('.player').filter(function() {
+    $('.samosa-player').filter(function() {
       $(this).attr('id', 'play');
       $(this).attr('src', chrome.extension.getURL("../images/play.png"))
     });
@@ -196,23 +163,45 @@ pause_allaudio = function() {
 
     $('.samosa-clips').empty();
 
+
     if (typeof voices != 'undefined') {
 
       for (i = 0; i < voices.length; i++) {
         $('.samosa-clips').append('<div class="samosa-audioclip"> \
         <img width="120" height="120" src="' + voices[i].poster_url + '" style="position: relative; top: 0; left: 0;"/> \
-        <img class="player" id ="play" src="' + chrome.extension.getURL("../images/play.png") + '" style="width:30px;position: absolute; top: 43px; left: 45px; cursor:pointer;"/> \
-        <span style="display:none;" class="audioclip-path">' + voices[i].mp3_url + '</span> \
+        <img class="samosa-player" id ="play" src="' + chrome.extension.getURL("../images/play.png") + '"/> \
         <div style="display:none;" class="audioclip-copypath"> http://app.getsamosa.com/play/' + voices[i].key + '</div> \
-        <button class="samosa-copybtn" style="height:25px;width:120px;cursor:pointer;font-size:8px;">CLICK TO COPY</button> \
+        <button style="visibility:hidden" class="samosa-copybtn">CLICK TO COPY</button> \
+        <audio preload="auto" src="'+ voices[i].opus_url +'"></audio> \
       </div> \
       ');
       }
+
+      end_voices_event();
+
     }
     else {
       $('.samosa-clips').append('No voices found :( . Try again!!');
     }
   },
+
+  /**
+   * 
+   */
+
+  end_voices_event = function(){
+
+    var audio = $('audio');
+
+    for (i = 0; i < audio.length; i++) {
+      
+       audio[i].addEventListener("ended", function() {
+          $(this).parent().find('#pause').attr('id', 'play');
+          $(this).parent().find('#play').attr('src', chrome.extension.getURL("../images/play.png"));
+      });
+    }
+
+  }
 
   /**
    * comment_box_icon appends samosa icon to fb comment box
@@ -224,6 +213,6 @@ pause_allaudio = function() {
       return $(this).find('.samosa_comment').length == 0;
     });
 
-    $(new_comment).append('<div data-hover="tooltip" data-tooltip-alignh="center" aria-label="Attach a audio clip" class="comment_box_icon"><img class="samosa_comment" width="22px" src=' + img_url + '></div>');
+    $(new_comment).append('<div data-hover="tooltip" data-tooltip-alignh="center" aria-label="Attach a audio clip" class="comment_box_icon"><img class="samosa_comment" width="20px" src=' + img_url + '></div>');
 
   }
