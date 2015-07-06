@@ -59,8 +59,10 @@ $(document).on('click', '.samosa-copybtn', function(e) {
     text: link
   });
 
+  pause_allaudio(); //pause all playing audio files
+
  $( '.samosa-modal' ).fadeOut( "slow", function() {
-    // Animation complete.
+       
   });
 
 });
@@ -80,6 +82,7 @@ $(document).on('click', '.samosa-player', function(e) {
   var id = $(this).attr('id');
   if (id === "play") {
 
+    pause_allaudio(); //pause all playing audio files
     audio_action(this, 'pause');
 
   }  
