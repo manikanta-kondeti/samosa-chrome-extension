@@ -28,7 +28,6 @@ Top bar which contains update status,add photos etc.
 
 
 .samosa_comment_box_icon{
- background-image: url(/rsrc.php/v2/yI/r/6qU1fbcaeS0.png);
  background-repeat: no-repeat;
  width: 29px;
  height: 31px;
@@ -36,15 +35,10 @@ Top bar which contains update status,add photos etc.
  background-size: 22px 22px;
  background-position: 4px 5px;
  display: block;
+ opacity: 0.6;
 }
 
-
-
-.samosa_comment{
-  opacity: 0.6;
-}
-
-.samosa_comment:hover{
+.samosa_comment_box_icon:hover{
   opacity: 1;
 }
 
