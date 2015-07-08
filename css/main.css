@@ -1,0 +1,47 @@
+.css-isolation-popup {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+/*
+This ones for the news feeds and left side bar in facebook
+*/
+._64b{
+	z-index: 0 !important;
+}
+
+/*
+Top bar which contains update status,add photos etc.
+*/
+._1dsl{
+	z-index: 0 !important;
+}
+
+.samosa_comment_box_wrapper{
+  cursor: pointer;
+  float: right;
+  overflow: hidden;
+}
+
+
+.samosa_comment_box_icon{
+ background-repeat: no-repeat;
+ width: 29px;
+ height: 31px;
+ margin: -2px -2px;
+ background-size: 22px 22px;
+ background-position: 4px 5px;
+ display: block;
+ opacity: 0.6;
+}
+
+.samosa_comment_box_icon:hover{
+  opacity: 1;
+}
+
+.UFICommentAttachmentButtons{
+  z-index:100 !important;
+}
