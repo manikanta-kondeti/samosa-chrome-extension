@@ -20,13 +20,25 @@ Top bar which contains update status,add photos etc.
 	z-index: 0 !important;
 }
 
-.comment_box_icon{
-  float: left;
-  display: block;
-  padding: 3px 3px 0px 0px;
-  margin-right: 5px;
+.samosa_comment_box_wrapper{
   cursor: pointer;
+  float: right;
+  overflow: hidden;
 }
+
+
+.samosa_comment_box_icon{
+ background-image: url(/rsrc.php/v2/yI/r/6qU1fbcaeS0.png);
+ background-repeat: no-repeat;
+ width: 29px;
+ height: 31px;
+ margin: -2px -2px;
+ background-size: 22px 23px;
+ background-position: 4px 5px;
+ display: block;
+}
+
+
 
 .samosa_comment{
   opacity: 0.6;

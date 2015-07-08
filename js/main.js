@@ -14,7 +14,7 @@ $(document).ready(function() {
  * load html page to the modal and show it 
  */
 
-$(document).on("click", ".samosa_comment", function(e) {
+$(document).on("click", ".samosa_comment_box_wrapper", function(e) {
 
 
   if ($('.samosa-modal').length === 0) {
@@ -213,9 +213,11 @@ pause_allaudio = function() {
     var img_url = chrome.extension.getURL('../images/icon.png');
 
     var new_comment = $('.UFICommentAttachmentButtons').filter(function() {
-      return $(this).find('.samosa_comment').length == 0;
+      return $(this).find('.samosa_comment_box_icon').length == 0;
     });
 
-    $(new_comment).append('<div data-hover="tooltip" data-tooltip-alignh="center" aria-label="Attach a audio clip" class="comment_box_icon"><img class="samosa_comment" width="20px" src=' + img_url + '></div>');
-
+    $(new_comment).append('<div class="samosa_comment_box_wrapper" data-hover="tooltip" data-tooltip-alignh="center" aria-label="Attach an Audio Clip"> \
+           <i style="background-image: url('+ img_url +')" class="samosa_comment_box_icon"></i> \
+      </div>\
+     ')
   }
